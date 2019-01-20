@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="stylesheet" href="/ol/ol.css">
+    <style>
+    footer{
+    	position: fixed;
+    	bottom: 0;
+    	color: red;
+    }
+</style>
+  </head>
+  <body>
+  	<script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <div>
+        P0 M0<input class="btn" data-parking="0" data-miejsce="0" type="number"></br>
+        P0 M1<input class="btn" data-parking="0" data-miejsce="1" type="number"></br>
+        P1 M0<input class="btn" data-parking="1" data-miejsce="0" type="number"></br>
+        P1 M1<input class="btn" data-parking="1" data-miejsce="1" type="number"></br>
+        P1 M2<input class="btn" data-parking="1" data-miejsce="2" type="number"></br>
+        P1 M3<input class="btn" data-parking="1" data-miejsce="3" type="number"></br>
+        P1 M4<input class="btn" data-parking="1" data-miejsce="4" type="number"></br>
+    </div>
+    <script>
+        var socket = io();
+        $('.btn').on('change', (e) => {
+                var p = e.target.getAttribute('data-parking');
+                var m = e.target.getAttribute('data-miejsce');
+                var v = e.target.value;
+                socket.emit('change data', p, m, v);
+        });
+    </script>
+  </body>
+</html>

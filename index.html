@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+    footer{
+    	position: fixed;
+    	bottom: 0;
+    	color: red;
+    }
+</style>
+  </head>
+  <body>
+  	<script
+			  src="https://code.jquery.com/jquery-3.3.1.min.js"
+			  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			  crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+    	var socket = io();
+    	var login = prompt("Login");
+    	var pass = prompt("Pass");
+    	var idKontrolera;
+    	socket.emit('login', login, pass);
+
+    	socket.on('logged', (id) => {
+    		idKontrolera = id;
+    		$('h1').html("Witaj: " + idKontrolera);
+    	});
+
+    	socket.on('err', (msg) => {
+    		$('footer').html(msg);
+    	});
+    	socket.on("show parking", (id, data) => {
+    		var div = $(`<div id="${id}"></div>`);
+
+    		var wolne = 0;
+    		var zajete = 0;
+    		for(var a = 0; a < data.length; a++){
+    			if(data[a].status == 0){
+    				wolne++;
+    			} else if(data[a].status == 1){
+    				zajete++;
+    			}
+    			div.append(`<p>Miejsce: ${data[a].id} Status: ${data[a].status}</p>`);
+    		}
+
+    		div.prepend(`<p>Wolne: ${wolne} Zajęte:${zajete}</p>`);
+    		div.prepend(`<h3>Parking: ${id}</h3>`);
+    		$('#parkingi').html(div);
+    	});
+    </script>
+    <h1></h1>
+    <div id="parkingi"></div>
+    <footer></footer>
+  </body>
+</html>
